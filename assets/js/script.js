@@ -23,10 +23,36 @@ function displayCity(event) {
             var lon = data[0].lon;
             console.log(`Lat is ${lat}`);
             console.log(`Lon is ${lon}`);
+
+            /* -------------------- Get the weather info for the city ------------------- */
+            var queryURLWeather = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey;
+            console.log(`Query URL for coordinates is: ${queryURLWeather}`);
+
+
+            fetch(queryURLWeather)
+            .then(function (response) {
+                // Calling .json() to access the json data stored inside the returned promise
+                return response.json();
+            })
+            // We store all of the retrieved data inside of an object called "data"
+            .then(function (data) {
+
+                console.log(data.list[0]);
+                console.log(`City name: ${data.city.name}`);
+                console.log(`Date: ${data.list[0].dt}`);
+                console.log(`Icon: ${data.list[0].weather[0].icon}`);
+                console.log(`Temperature: ${data.list[0].main.temp}`);
+                console.log(`Humidity: ${data.list[0].main.humidity}`);
+                console.log(`Wind speed: ${data.list[0].wind.speed}`);
+
+        
+
+
+            });
+
+
         });
 
-    /* -------------------- Get the weather info for the city ------------------- */
-    var queryURLWeather = "https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid=" + APIKey;
-    console.log(`Query URL for coordinates is: ${queryURLWeather}`);
+
 
 }
