@@ -32,8 +32,8 @@ function displayCity(event) {
             // Step 1: Create the button element
             var button = document.createElement("button");
             // Step 2: Set button properties
-            button.setAttribute("id", "Button");
-            button.setAttribute("class", "btnClass");
+            button.setAttribute("data-city", city);
+            button.setAttribute("class", "cityButton");
             button.setAttribute("type", "button");
             // Step 3: Add text to the button
             button.textContent = city;
@@ -111,3 +111,22 @@ function displayCity(event) {
                 });
         });
 }
+
+// Assuming you have a container element that holds the dynamically created buttons
+var container = document.getElementById("history");
+console.log(container);
+
+// Function to handle the button click event
+function handleButtonClick(event) {
+  // Check if the clicked element is a button with the specified data attribute
+  // console.log("Inside the city button event listener");
+  if (event.target.tagName === "BUTTON" && event.target.dataset.city) {
+    // Access the data attribute value
+    var cityValue = event.target.dataset.city;
+    console.log(`Will need to fetch weather info for ${cityValue}`);
+
+  }
+}
+
+// Attach the event listener to the container using event delegation
+container.addEventListener("click", handleButtonClick);
