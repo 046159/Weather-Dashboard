@@ -37,13 +37,18 @@ function displayCity(event) {
             // We store all of the retrieved data inside of an object called "data"
             .then(function (data) {
 
-                console.log(data.list[0]);
-                console.log(`City name: ${data.city.name}`);
-                console.log(`Date: ${data.list[0].dt}`);
-                console.log(`Icon: ${data.list[0].weather[0].icon}`);
-                console.log(`Temperature: ${data.list[0].main.temp}`);
-                console.log(`Humidity: ${data.list[0].main.humidity}`);
-                console.log(`Wind speed: ${data.list[0].wind.speed}`);
+                for (var i = 0; i < 6; i++) {
+                    console.log("=============================================");
+                    console.log(`City name: ${data.city.name}`);
+                    console.log(`Date: ${data.list[i].dt}`);
+                    console.log(`Icon: ${data.list[i].weather[0].icon}`);
+                    console.log(`Temperature: ${data.list[i].main.temp}`);
+                    console.log(`Humidity: ${data.list[i].main.humidity}`);
+                    console.log(`Wind speed: ${data.list[i].wind.speed}`);
+                    
+                }
+
+
 
         
 
