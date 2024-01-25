@@ -28,6 +28,7 @@ function displayCity(event) {
             }
 
             // Create buttons for the city
+            var targetSection = document.getElementById("history");
             // Step 1: Create the button element
             var button = document.createElement("button");
             // Step 2: Set button properties
@@ -37,7 +38,7 @@ function displayCity(event) {
             // Step 3: Add text to the button
             button.textContent = city;
             // Step 4: Append the button to the HTML document
-            document.body.appendChild(button);
+            targetSection.appendChild(button);
 
             var lat = data[0].lat;
             var lon = data[0].lon;
@@ -67,15 +68,44 @@ function displayCity(event) {
                             console.log(`${i} =============================================`);
                             console.log(`Date: ${dateDisplay}`);
                             console.log(`City name: ${data.city.name}`);
-                            console.log(`Icon: ${data.list[i].weather[0].icon}`);
 
-                            tempC = Math.round(data.list[i].main.temp - 273.15);
+                            var icon = data.list[i].weather[0].icon;
+                            var iconURL = "http://openweathermap.org/img/w/" + icon + ".png";
+                            console.log(`Icon: ${icon}`);
+
+                            var tempC = (data.list[i].main.temp - 273.15);
+                            tempC = tempC.toFixed(2);
                             console.log(`Temperature: ${tempC} Celcius`);
-                            console.log(`Humidity: ${data.list[i].main.humidity} %`);
+
+                            var humidity = data.list[i].main.humidity;
+                            console.log(`Humidity: ${humidity} %`);
 
                             // Convert from metres per second to miles per hour
                             mph = (data.list[i].wind.speed * 2.23694);
+                            mph = mph.toFixed(1);
                             console.log(`Wind speed: ${data.list[i].wind.speed} MPH`);
+                        }
+
+                        if (i === 0) {
+
+                            var targetSection = document.getElementById("today");
+                            targetSection.innerHTML = "";
+                            
+                            var cityEl = document.createElement("p");
+                            var tempEl = document.createElement("p");
+                            var windEl = document.createElement("p");
+                            var humidityEl = document.createElement("p");
+                            
+                            cityEl.innerHTML = "<strong>" + city + " (" + dateDisplay + " at " + dateArray[4] + ") <img src='" + iconURL + "'></strong>";
+
+                            tempEl.textContent = "Temp: " + tempC + " ℃";
+                            windEl.textContent = "Wind: " + mph + " MPH";
+                            humidityEl.textContent = "Humidity: " + humidity + "%";
+
+                            targetSection.appendChild(cityEl);
+                            targetSection.appendChild(tempEl);
+                            targetSection.appendChild(windEl);
+                            targetSection.appendChild(humidityEl);
                         }
                     }
                 });
