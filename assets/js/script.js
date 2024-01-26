@@ -4,6 +4,15 @@ var cityArray = [];
 /* ------------------------------- My API key ------------------------------- */
 var APIKey = "863baffad00b5904efb1c287625183c4";
 
+/* -------- Create buttons if cities already stored in local storage -------- */
+var cityArrayStored = localStorage.getItem("Weather-Dashboard-Cities");
+if (cityArrayStored !== null) {
+    cityArray = JSON.parse(cityArrayStored);
+    for (let i = 0; i < cityArray.length; i++) {
+        createCityButton(cityArray[i], 0);
+    }
+}
+
 /* -------------------------------------------------------------------------- */
 /*                   Create a listener for the Search button                  */
 /* -------------------------------------------------------------------------- */
@@ -49,7 +58,9 @@ function getWeather(city) {
             }
 
             /* ------------------- call function to create City button ------------------ */
-            if (!(cityArray.includes(city))) createCityButton(city);
+            console.log(cityArray);
+            if (cityArray === null) createCityButton(city, 1);
+            else if (!(cityArray.includes(city))) createCityButton(city, 1);
 
             /* -------------- Store latitude and longitude values for city -------------- */
             var lat = data[0].lat;
@@ -160,7 +171,7 @@ function handleButtonClick(event) {
 /* -------------------------------------------------------------------------- */
 /*                       Function to create City button                       */
 /* -------------------------------------------------------------------------- */
-function createCityButton(city) {
+function createCityButton(city, updateLS) {
 
     // Step 0: Get the appropriate element from the HTML to insert the buttons in
     var targetSection = document.getElementById("history");
@@ -180,7 +191,10 @@ function createCityButton(city) {
     targetSection.appendChild(button);
 
     // Update array of cities and save to local storage
-    cityArray.push(city);
-    localStorage.setItem("Weather-Dashboard-Cities",cityArray);
-
+    if (updateLS) {
+        console.log(city);
+        cityArray.push(city);
+        var cityArrayString = JSON.stringify(cityArray);
+        localStorage.setItem("Weather-Dashboard-Cities", cityArrayString);
+    }
 }
