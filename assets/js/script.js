@@ -55,9 +55,12 @@ function getWeather(city) {
             /* ------------------------- Return if invalid city ------------------------- */
             if (data.length === 0) {
                 console.log("Invalid city was chosen.");
-                // TODO: Display Toast to say invalid city was chosen
                 return;
             }
+
+            /* -------------------- Clear the 5-day forecast section -------------------- */
+            var targetSection = document.getElementById("forecast");
+            targetSection.innerHTML = "";
 
             /* ------------------- call function to create City button ------------------ */
             console.log(cityArray);
@@ -150,6 +153,11 @@ function getWeather(city) {
                                 targetSection.appendChild(tempEl);
                                 targetSection.appendChild(windEl);
                                 targetSection.appendChild(humidityEl);
+
+                                /* ------------------------------- Formatting ------------------------------- */
+                                targetSection.style.border = "2px solid black";
+                                targetSection.style.padding = "5px";
+
                             } else {
 
                                 /* ------------------------- Counter for the 5 cards ------------------------ */
@@ -168,7 +176,7 @@ function getWeather(city) {
 
                                 // Create a card body div
                                 var cardBodyDiv = document.createElement("div");
-                                cardBodyDiv.classList.add("card-body bg-");
+                                cardBodyDiv.classList.add("card-body");
 
                                 // Create a card text paragraph
                                 var cardText = document.createElement("p");
@@ -183,7 +191,8 @@ function getWeather(city) {
                                 // Append the column to the target section
                                 targetSection.appendChild(columnDiv);
 
-
+                                cardDiv.style.backgroundColor = "navy";
+                                cardDiv.style.color = "white";
 
                             }
                         }
@@ -222,10 +231,6 @@ function handleButtonClick(event) {
 /*                       Function to create City button                       */
 /* -------------------------------------------------------------------------- */
 function createCityButton(city, updateLS) {
-
-    /* -------------------- Clear the 5-day forecast section -------------------- */
-    var targetSection = document.getElementById("forecast");
-    targetSection.innerHTML = "";
 
     // Step 0: Get the appropriate element from the HTML to insert the buttons in
     var targetSection = document.getElementById("history");
