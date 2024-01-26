@@ -168,7 +168,7 @@ function getWeather(city) {
 
                                 // Create a card body div
                                 var cardBodyDiv = document.createElement("div");
-                                cardBodyDiv.classList.add("card-body");
+                                cardBodyDiv.classList.add("card-body bg-");
 
                                 // Create a card text paragraph
                                 var cardText = document.createElement("p");
@@ -235,7 +235,7 @@ function createCityButton(city, updateLS) {
 
     // Step 2: Set button attributes
     button.setAttribute("data-city", city);
-    button.setAttribute("class", "cityButton");
+    button.setAttribute("class", "btn btn-secondary m-1");
     button.setAttribute("type", "button");
 
     // Step 3: Add text to the button
