@@ -1,3 +1,6 @@
+/* -------------------------------- Variables ------------------------------- */
+var cityArray = [];
+
 /* ------------------------------- My API key ------------------------------- */
 var APIKey = "863baffad00b5904efb1c287625183c4";
 
@@ -8,21 +11,17 @@ document.getElementById("search-button").addEventListener("click", displayCity);
 
 /* ---------------------- When Search button is pressed --------------------- */
 function displayCity(event) {
-    console.log("Search button was pressed.");
+    // console.log("Search button was pressed.");
 
     /* ---------------------- Prevent page from refreshing ---------------------- */
     event.preventDefault();
 
     /* ------------------------- Get value typed by user ------------------------ */
     var city = document.getElementById("search-input").value;
-    console.log(`Input field has value "${city}".`)
+    // console.log(`Input field has value "${city}".`)
 
     /* ------------------ Call function to get weather for city ----------------- */
     getWeather(city);
-
-    /* ------------------- call function to create City button ------------------ */
-    // TODO: Check button doesn't already exist before calling function
-    createCityButton(city);
 
 }
 
@@ -30,7 +29,6 @@ function displayCity(event) {
 /*                      Function to get weather for city                      */
 /* -------------------------------------------------------------------------- */
 function getWeather(city) {
-
 
     /* ------------------- Get Latitude and Longitude for City ------------------ */
     var queryURLCoordinates = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=5&appid=" + APIKey;
@@ -50,11 +48,14 @@ function getWeather(city) {
                 return;
             }
 
+            /* ------------------- call function to create City button ------------------ */
+            if (!(cityArray.includes(city))) createCityButton(city);
+
             /* -------------- Store latitude and longitude values for city -------------- */
             var lat = data[0].lat;
             var lon = data[0].lon;
-            console.log(`Latitude is ${lat}`);
-            console.log(`Longitude is ${lon}`);
+            // console.log(`Latitude is ${lat}`);
+            // console.log(`Longitude is ${lon}`);
 
             /* -------------------- Get the weather info for the city ------------------- */
             var queryURLWeather = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey;
@@ -79,28 +80,28 @@ function getWeather(city) {
                         var dateDisplay = dateArray[0] + " " + dateArray[1] + " " + dateArray[2] + " " + dateArray[3];
 
                         if ((dateArray[4] === "12:00:00") | (i === 0)) {
-                            console.log(`${i} =============================================`);
-                            console.log(`Date: ${dateDisplay}`);
-                            console.log(`City name: ${data.city.name}`);
+                            // console.log(`${i} =============================================`);
+                            // console.log(`Date: ${dateDisplay}`);
+                            // console.log(`City name: ${data.city.name}`);
 
                             /* -------------------------------- Get icon -------------------------------- */
                             var icon = data.list[i].weather[0].icon;
                             var iconURL = "http://openweathermap.org/img/w/" + icon + ".png";
-                            console.log(`Icon: ${icon}`);
+                            // console.log(`Icon: ${icon}`);
 
                             /* ---------------- Get temp in Kelvin and convert to Celcius --------------- */
                             var tempC = (data.list[i].main.temp - 273.15);
                             tempC = tempC.toFixed(2);
-                            console.log(`Temperature: ${tempC} Celcius`);
+                            // console.log(`Temperature: ${tempC} Celcius`);
 
                             /* ------------------------------ Get humidity ------------------------------ */
                             var humidity = data.list[i].main.humidity;
-                            console.log(`Humidity: ${humidity} %`);
+                            // console.log(`Humidity: ${humidity} %`);
 
                             /* --- Get wind speed and convert from metres per second to miles per hour -- */
                             mph = (data.list[i].wind.speed * 2.23694);
                             mph = mph.toFixed(1);
-                            console.log(`Wind speed: ${data.list[i].wind.speed} MPH`);
+                            // console.log(`Wind speed: ${data.list[i].wind.speed} MPH`);
 
                             /* ----------------------------- Current weather ---------------------------- */
                             if (i === 0) {
@@ -145,7 +146,7 @@ container.addEventListener("click", handleButtonClick);
 
 /* ----------- Function to handle the button click for city button ---------- */
 function handleButtonClick(event) {
-    
+
     /* ----- Check if  clicked element is button with "city" data attribute ----- */
     // console.log("Inside the city button event listener");
     if (event.target.tagName === "BUTTON" && event.target.dataset.city) {
@@ -177,5 +178,9 @@ function createCityButton(city) {
 
     // Step 4: Append the button to the HTML document
     targetSection.appendChild(button);
+
+    // Update array of cities and save to local storage
+    cityArray.push(city);
+    localStorage.setItem("Weather-Dashboard-Cities",cityArray);
 
 }
