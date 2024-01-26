@@ -39,6 +39,8 @@ function displayCity(event) {
 /* -------------------------------------------------------------------------- */
 function getWeather(city) {
 
+    var k = 0;
+
     /* ------------------- Get Latitude and Longitude for City ------------------ */
     var queryURLCoordinates = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=5&appid=" + APIKey;
     // console.log(`Query URL for coordinates is: ${queryURLCoordinates}`);
@@ -88,7 +90,9 @@ function getWeather(city) {
                         var unixDate = (data.list[i].dt) * 1000;
                         var trueDate = new Date(unixDate);
                         var dateArray = trueDate.toString().split(" ");
+                        // console.log(dateArray);
                         var dateDisplay = dateArray[0] + " " + dateArray[1] + " " + dateArray[2] + " " + dateArray[3];
+                        var dateDisplayShort = dateArray[2] + " " + dateArray[1] + " " + dateArray[3]
 
                         if ((dateArray[4] === "12:00:00") | (i === 0)) {
                             // console.log(`${i} =============================================`);
@@ -114,6 +118,12 @@ function getWeather(city) {
                             mph = mph.toFixed(1);
                             // console.log(`Wind speed: ${data.list[i].wind.speed} MPH`);
 
+                            /* ---------------- Construct the info that will be displayed --------------- */
+                            cityDisplay = "<h2>" + city + " (" + dateDisplay + " at " + dateArray[4] + ") <img src='" + iconURL + "'></h2>";
+                            temperatureDisplay = "Temp: " + tempC + " ℃";
+                            windDisplay = "Wind: " + mph + " MPH";
+                            humidityDisplay = "Humidity: " + humidity + "%";
+
                             /* ----------------------------- Current weather ---------------------------- */
                             if (i === 0) {
 
@@ -130,16 +140,51 @@ function getWeather(city) {
                                 var humidityEl = document.createElement("p");
 
                                 /* --------- Set the text or HTML for the elements we want to create -------- */
-                                cityEl.innerHTML = "<strong>" + city + " (" + dateDisplay + " at " + dateArray[4] + ") <img src='" + iconURL + "'></strong>";
-                                tempEl.textContent = "Temp: " + tempC + " ℃";
-                                windEl.textContent = "Wind: " + mph + " MPH";
-                                humidityEl.textContent = "Humidity: " + humidity + "%";
+                                cityEl.innerHTML = cityDisplay;
+                                tempEl.textContent = temperatureDisplay
+                                windEl.textContent = windDisplay;
+                                humidityEl.textContent = humidityDisplay;
 
                                 /* --------------------- Create the elements on the page -------------------- */
                                 targetSection.appendChild(cityEl);
                                 targetSection.appendChild(tempEl);
                                 targetSection.appendChild(windEl);
                                 targetSection.appendChild(humidityEl);
+                            } else {
+
+                                /* ------------------------- Counter for the 5 cards ------------------------ */
+                                k++;
+
+                                /* ------- Get the HTML element where we want to write the weather to ------- */
+                                var targetSection = document.getElementById("forecast");
+
+                                // Create a column div
+                                var columnDiv = document.createElement("div");
+                                columnDiv.classList.add("col-md-2");
+
+                                // Create a card div
+                                var cardDiv = document.createElement("div");
+                                cardDiv.classList.add("card");
+
+                                // Create a card body div
+                                var cardBodyDiv = document.createElement("div");
+                                cardBodyDiv.classList.add("card-body");
+
+                                // Create a card text paragraph
+                                var cardText = document.createElement("p");
+                                cardText.classList.add("card-text");
+                                cardText.innerHTML = `<strong>${dateDisplayShort}</strong> \n <img src=${iconURL}> <br> ${temperatureDisplay} <br><br> ${windDisplay} <br><br> ${humidityDisplay}`;
+
+                                // Append the elements in the hierarchy
+                                cardBodyDiv.appendChild(cardText);
+                                cardDiv.appendChild(cardBodyDiv);
+                                columnDiv.appendChild(cardDiv);
+
+                                // Append the column to the target section
+                                targetSection.appendChild(columnDiv);
+
+
+
                             }
                         }
                     }
@@ -161,6 +206,11 @@ function handleButtonClick(event) {
     /* ----- Check if  clicked element is button with "city" data attribute ----- */
     // console.log("Inside the city button event listener");
     if (event.target.tagName === "BUTTON" && event.target.dataset.city) {
+
+        /* -------------------- Clear the 5-day forecast section -------------------- */
+        var targetSection = document.getElementById("forecast");
+        targetSection.innerHTML = "";
+
         // Access the data attribute value
         var cityValue = event.target.dataset.city;
         console.log(`Will need to fetch weather info for ${cityValue}`);
@@ -172,6 +222,10 @@ function handleButtonClick(event) {
 /*                       Function to create City button                       */
 /* -------------------------------------------------------------------------- */
 function createCityButton(city, updateLS) {
+
+    /* -------------------- Clear the 5-day forecast section -------------------- */
+    var targetSection = document.getElementById("forecast");
+    targetSection.innerHTML = "";
 
     // Step 0: Get the appropriate element from the HTML to insert the buttons in
     var targetSection = document.getElementById("history");
