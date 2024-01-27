@@ -42,7 +42,7 @@ function displayCity(event) {
 
     /* ------------------ Call function to get weather for city ----------------- */
     getWeather(city);
-
+    document.getElementById("search-input").value = ""; // Clear the input field afterwards
 }
 
 /* -------------------------------------------------------------------------- */
