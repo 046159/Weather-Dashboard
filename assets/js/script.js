@@ -27,7 +27,13 @@ function displayCity(event) {
 
     /* ------------------------- Get value typed by user ------------------------ */
     var city = document.getElementById("search-input").value;
-    // console.log(`Input field has value "${city}".`)
+    console.log(`Input field has value >"${city}"<.`)
+
+    /* ------------------------- Return if invalid city ------------------------- */
+    if (city === "") {
+        console.log("Error: No city was specified.");
+        return;
+    }
 
     /* ------------------ Call function to get weather for city ----------------- */
     getWeather(city);
@@ -54,7 +60,7 @@ function getWeather(city) {
 
             /* ------------------------- Return if invalid city ------------------------- */
             if (data.length === 0) {
-                console.log("Invalid city was chosen.");
+                console.log("Error: Invalid city was chosen.");
                 return;
             }
 
@@ -86,6 +92,8 @@ function getWeather(city) {
                 // We store all of the retrieved data inside of an object called "data"
                 .then(function (data) {
 
+                    console.log(data);
+
                     /* --------- There should be 40 values 5 days at 3 hourly intervals --------- */
                     for (var i = 0; i < data.cnt; i++) {
 
@@ -93,14 +101,14 @@ function getWeather(city) {
                         var unixDate = (data.list[i].dt) * 1000;
                         var trueDate = new Date(unixDate);
                         var dateArray = trueDate.toString().split(" ");
-                        // console.log(dateArray);
                         var dateDisplay = dateArray[0] + " " + dateArray[1] + " " + dateArray[2] + " " + dateArray[3];
                         var dateDisplayShort = dateArray[2] + " " + dateArray[1] + " " + dateArray[3]
 
-                        if ((dateArray[4] === "12:00:00") | (i === 0)) {
-                            // console.log(`${i} =============================================`);
-                            // console.log(`Date: ${dateDisplay}`);
-                            // console.log(`City name: ${data.city.name}`);
+                        if ((dateArray[4] === "09:00:00") | (i === 0)) {
+
+                            console.log(`${i} =============================================`);
+                            console.log(`Date: ${dateDisplay}`);
+                            console.log(`City name: ${data.city.name}`);
 
                             /* -------------------------------- Get icon -------------------------------- */
                             var icon = data.list[i].weather[0].icon;
@@ -168,11 +176,12 @@ function getWeather(city) {
 
                                 // Create a column div
                                 var columnDiv = document.createElement("div");
-                                columnDiv.classList.add("col-md-2");
+                                columnDiv.classList.add("col-2");
 
                                 // Create a card div
                                 var cardDiv = document.createElement("div");
                                 cardDiv.classList.add("card");
+                                cardDiv.classList.add("h-100");
 
                                 // Create a card body div
                                 var cardBodyDiv = document.createElement("div");
