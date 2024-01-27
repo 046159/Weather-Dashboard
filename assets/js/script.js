@@ -157,6 +157,7 @@ function getWeather(city) {
                                 humidityEl.textContent = humidityDisplay;
 
                                 /* --------------------- Create the elements on the page -------------------- */
+
                                 targetSection.appendChild(cityEl);
                                 targetSection.appendChild(tempEl);
                                 targetSection.appendChild(windEl);
@@ -173,6 +174,12 @@ function getWeather(city) {
 
                                 /* ------- Get the HTML element where we want to write the weather to ------- */
                                 var targetSection = document.getElementById("forecast");
+
+                                /* ----------------------------- Display heading ---------------------------- */
+                                if (k === 1) {
+                                    var forecastHeadingEl = document.createElement("h3");
+                                    forecastHeadingEl.textContent = "5-Day Forecast:";
+                                }
 
                                 // Create a column div
                                 var columnDiv = document.createElement("div");
@@ -200,6 +207,7 @@ function getWeather(city) {
                                 columnDiv.appendChild(cardDiv);
 
                                 // Append the column to the target section
+                                if (k === 1) targetSection.appendChild(forecastHeadingEl);
                                 targetSection.appendChild(columnDiv);
 
                                 cardDiv.style.backgroundColor = "navy";
