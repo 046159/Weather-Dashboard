@@ -18,6 +18,11 @@ if (cityArrayStored !== null) {
 /* -------------------------------------------------------------------------- */
 document.getElementById("search-button").addEventListener("click", displayCity);
 
+/* -------------------------------------------------------------------------- */
+/*                   Create a listener for the Reset button                   */
+/* -------------------------------------------------------------------------- */
+document.getElementById("reset-button").addEventListener("click", resetApp);
+
 /* ---------------------- When Search button is pressed --------------------- */
 function displayCity(event) {
     // console.log("Search button was pressed.");
@@ -275,4 +280,8 @@ function createCityButton(city, updateLS) {
         var cityArrayString = JSON.stringify(cityArray);
         localStorage.setItem("Weather-Dashboard-Cities", cityArrayString);
     }
+}
+
+function resetApp() {
+    localStorage.removeItem("Weather-Dashboard-Cities");
 }
