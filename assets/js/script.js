@@ -176,7 +176,8 @@ function getWeather(city) {
 
                                 // Create a column div
                                 var columnDiv = document.createElement("div");
-                                columnDiv.classList.add("col-2");
+                                columnDiv.classList.add("col-lg-2");
+                                columnDiv.classList.add("col-sm-12");
 
                                 // Create a card div
                                 var cardDiv = document.createElement("div");
