@@ -28,7 +28,9 @@
                         <input class="form-control weather-search" type="text" id="search-input" placeholder="London"
                                aria-labelledby="form-heading" aria-controls="today forecast"/>
                         <div class="input-group-append">
-                            <button type="submit" class="btn search-button btn-primary m-1" id="search-button"
+
+                            <!-- btn-block is deprecated so col-12 is needed to make the button full width -->
+                            <button type="submit" class="btn col-12 search-button btn-primary mt-3" id="search-button"
                                     aria-label="submit search">
                                 Search
                             </button>

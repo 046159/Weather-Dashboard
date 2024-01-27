@@ -251,7 +251,7 @@ function createCityButton(city, updateLS) {
 
     // Step 2: Set button attributes
     button.setAttribute("data-city", city);
-    button.setAttribute("class", "btn btn-secondary m-1");
+    button.setAttribute("class", "btn btn-secondary mb-1");
     button.setAttribute("type", "button");
 
     // Step 3: Add text to the button
