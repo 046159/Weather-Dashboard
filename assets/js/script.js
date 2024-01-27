@@ -32,7 +32,7 @@ function displayCity(event) {
 
     /* ------------------------- Get value typed by user ------------------------ */
     var city = document.getElementById("search-input").value;
-    console.log(`Input field has value >"${city}"<.`)
+    // console.log(`Input field has value >"${city}"<.`)
 
     /* ------------------------- Return if invalid city ------------------------- */
     if (city === "") {
@@ -111,9 +111,9 @@ function getWeather(city) {
 
                         if ((dateArray[4] === "09:00:00") | (i === 0)) {
 
-                            console.log(`${i} =============================================`);
-                            console.log(`Date: ${dateDisplay}`);
-                            console.log(`City name: ${data.city.name}`);
+                            // console.log(`${i} =============================================`);
+                            // console.log(`Date: ${dateDisplay}`);
+                            // console.log(`City name: ${data.city.name}`);
 
                             /* -------------------------------- Get icon -------------------------------- */
                             var icon = data.list[i].weather[0].icon;
@@ -135,7 +135,7 @@ function getWeather(city) {
                             // console.log(`Wind speed: ${data.list[i].wind.speed} MPH`);
 
                             /* ---------------- Construct the info that will be displayed --------------- */
-                            cityDisplay = "<h2>" + city + " (" + dateDisplay + " at " + dateArray[4] + ") <img src='" + iconURL + "'></h2>";
+                            cityDisplay = "<h2>" + city + ", " + data.city.country + " (" + dateDisplay + " at " + dateArray[4] + ") <img src='" + iconURL + "'></h2>";
                             temperatureDisplay = "Temp: " + tempC + " ℃";
                             windDisplay = "Wind: " + mph + " MPH";
                             humidityDisplay = "Humidity: " + humidity + "%";
@@ -246,7 +246,7 @@ function handleButtonClick(event) {
 
         // Access the data attribute value
         var cityValue = event.target.dataset.city;
-        console.log(`Will need to fetch weather info for ${cityValue}`);
+        // console.log(`Will need to fetch weather info for ${cityValue}`);
         getWeather(cityValue);
     }
 }
