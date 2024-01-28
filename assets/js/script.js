@@ -74,7 +74,7 @@ function getWeather(city) {
             targetSection.innerHTML = "";
 
             /* ------------------- call function to create City button ------------------ */
-            console.log(cityArray);
+            // console.log(cityArray);
             if (cityArray === null) createCityButton(city, 1);
             else if (!(cityArray.includes(city))) createCityButton(city, 1);
 
@@ -108,12 +108,68 @@ function getWeather(city) {
                         var dateArray = trueDate.toString().split(" ");
                         var dateDisplay = dateArray[0] + " " + dateArray[1] + " " + dateArray[2] + " " + dateArray[3];
                         var dateDisplayShort = dateArray[2] + " " + dateArray[1] + " " + dateArray[3]
+                        
+                        // Store today's date
+                        if (i === 0) var todayDate = dateDisplayShort;
 
-                        if ((dateArray[4] === "09:00:00") | (i === 0)) {
+                        // console.log(dateDisplayShort); // Show dates in the array e.g. 28 Jan 2024 
+                        // console.log(dateArray[4]); // Show the hours
 
+                        // Need to set the weather time to the second 3 hourly slot to ensure 5 days are always returned
+                        // Since if it's the next 3 hourly slot, the API won't have weather for that time  in 5 days' time
+                        var d = new Date();
+                        var currentHour = d.getHours(); // 24 hour format
+                        switch (currentHour) {
+                            case 9:
+                            case 10:
+                            case 11:
+                                weatherTime = "09:00:00";
+                                break;
+                            case 12:
+                            case 13:
+                            case 14:
+                                weatherTime = "12:00:00";
+                                break;
+                            case 15:
+                            case 16:
+                            case 17:
+                                weatherTime = "15:00:00";
+                                break;
+                            case 18:
+                            case 19:
+                            case 20:
+                                weatherTime = "18:00:00";
+                                break;
+                            case 21:
+                            case 22:
+                            case 23:
+                                weatherTime = "21:00:00";
+                                break;
+                            case 0:
+                            case 1:
+                            case 2:
+                                weatherTime = "00:00:00";
+                                break;
+                            case 3:
+                            case 4:
+                            case 5:
+                                weatherTime = "03:00:00";
+                                break;
+                            case 6:
+                            case 7:
+                            case 8:
+                                weatherTime = "06:00:00";
+                                break;
+                            default:
+                                break;
+                        }
+
+                        if ((dateArray[4] === weatherTime) | (i === 0)) { // weatherTime is the time of day in future we should get the weather for
+                            
                             // console.log(`${i} =============================================`);
                             // console.log(`Date: ${dateDisplay}`);
                             // console.log(`City name: ${data.city.name}`);
+
 
                             /* -------------------------------- Get icon -------------------------------- */
                             var icon = data.list[i].weather[0].icon;
@@ -121,8 +177,8 @@ function getWeather(city) {
                             // console.log(`Icon: ${icon}`);
 
                             /* ---------------- Get temp in Kelvin and convert to Celcius --------------- */
-                            var tempC = (data.list[i].main.temp - 273.15);
-                            tempC = tempC.toFixed(2);
+                            var tempC = Math.round((data.list[i].main.temp - 273.15));
+                            // tempC = tempC.toFixed(2);
                             // console.log(`Temperature: ${tempC} Celcius`);
 
                             /* ------------------------------ Get humidity ------------------------------ */
@@ -130,12 +186,12 @@ function getWeather(city) {
                             // console.log(`Humidity: ${humidity} %`);
 
                             /* --- Get wind speed and convert from metres per second to miles per hour -- */
-                            mph = (data.list[i].wind.speed * 2.23694);
-                            mph = mph.toFixed(1);
+                            mph = Math.round((data.list[i].wind.speed * 2.23694));
+                            // mph = mph.toFixed(1);
                             // console.log(`Wind speed: ${data.list[i].wind.speed} MPH`);
 
                             /* ---------------- Construct the info that will be displayed --------------- */
-                            cityDisplay = "<h2>" + city + ", " + data.city.country + " (" + dateDisplay + " at " + dateArray[4] + ") <img src='" + iconURL + "'></h2>";
+                            cityDisplay = "<h2>" + city + ", " + data.city.country + " (" + dateDisplay + ") <img src='" + iconURL + "'></h2>";
                             temperatureDisplay = "Temp: " + tempC + " ℃";
                             windDisplay = "Wind: " + mph + " MPH";
                             humidityDisplay = "Humidity: " + humidity + "%";
@@ -172,7 +228,7 @@ function getWeather(city) {
                                 targetSection.style.border = "2px solid black";
                                 targetSection.style.padding = "5px";
 
-                            } else {
+                            } else if (todayDate !== dateDisplayShort) {
 
                                 /* ------------------------- Counter for the 5 cards ------------------------ */
                                 k++;
@@ -183,7 +239,7 @@ function getWeather(city) {
                                 /* ----------------------------- Display heading ---------------------------- */
                                 if (k === 1) {
                                     var forecastHeadingEl = document.createElement("h3");
-                                    forecastHeadingEl.textContent = "5-Day Forecast:";
+                                    forecastHeadingEl.textContent = "5-Day Forecast";
                                 }
 
                                 // Create a column div
