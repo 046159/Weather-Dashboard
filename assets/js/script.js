@@ -58,7 +58,7 @@ function getWeather(city) {
 
     /* ------------------- Get Latitude and Longitude for City ------------------ */
     /* ------- Weather API takes these as input, and not actual city name ------- */
-    var queryURLCoordinates = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=5&appid=" + APIKey;
+    var queryURLCoordinates = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=5&appid=" + APIKey;
     // console.log(`Query URL for coordinates is: ${queryURLCoordinates}`);
 
     fetch(queryURLCoordinates)
@@ -180,13 +180,13 @@ function getWeather(city) {
 
                             /* -------------------------------- Get icon -------------------------------- */
                             var icon = data.list[i].weather[0].icon;
-                            var iconURL = "http://openweathermap.org/img/w/" + icon + ".png";
+                            var iconURL = "https://openweathermap.org/img/w/" + icon + ".png";
                             // console.log(`Icon: ${icon}`);
 
-                            /* ---------------- Get temp in Kelvin and convert to Celcius --------------- */
+                            /* ---------------- Get temp in Kelvin and convert to Celsius --------------- */
                             var tempC = Math.round((data.list[i].main.temp - 273.15));
                             // tempC = tempC.toFixed(2);
-                            // console.log(`Temperature: ${tempC} Celcius`);
+                            // console.log(`Temperature: ${tempC} Celsius`);
 
                             /* ------------------------------ Get humidity ------------------------------ */
                             var humidity = data.list[i].main.humidity;
