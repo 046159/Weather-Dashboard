@@ -1,31 +1,34 @@
-/* -------------------------------- Variables ------------------------------- */
-var cityArray = [];
-
 /* ------------------------------- My API key ------------------------------- */
 var APIKey = "863baffad00b5904efb1c287625183c4";
 
 /* -------- Create buttons if cities already stored in local storage -------- */
+var cityArray = [];
 var cityArrayStored = localStorage.getItem("Weather-Dashboard-Cities");
 if (cityArrayStored !== null) {
     cityArray = JSON.parse(cityArrayStored);
-    for (let i = 0; i < cityArray.length; i++) {
+    for (var i = 0; i < cityArray.length; i++) {
         createCityButton(cityArray[i], 0);
     }
 }
 
 /* -------------------------------------------------------------------------- */
-/*                   Create a listener for the Search button                  */
+/*                              Create listeners                              */
 /* -------------------------------------------------------------------------- */
-document.getElementById("search-button").addEventListener("click", displayCity);
 
-/* -------------------------------------------------------------------------- */
-/*                   Create a listener for the Reset button                   */
-/* -------------------------------------------------------------------------- */
+/* ----------------- Create a listener for the Search button ---------------- */
+document.getElementById("search-button").addEventListener("click", processInputField);
+
+/* ----------------- Create a listener for the Reset button ----------------- */
 document.getElementById("reset-button").addEventListener("click", resetApp);
 
-/* ---------------------- When Search button is pressed --------------------- */
-function displayCity(event) {
-    // console.log("Search button was pressed.");
+/* --------------- Event listener when City button is pressed --------------- */
+var container = document.getElementById("history");
+container.addEventListener("click", handleButtonClick);
+
+/* -------------------------------------------------------------------------- */
+/*                 Function for when Search button is pressed                 */
+/* -------------------------------------------------------------------------- */
+function processInputField(event) {
 
     /* ---------------------- Prevent page from refreshing ---------------------- */
     event.preventDefault();
@@ -50,11 +53,14 @@ function displayCity(event) {
 /* -------------------------------------------------------------------------- */
 function getWeather(city) {
 
+    /* ------------- Counter used to create/display forecast heading ------------ */
     var k = 0;
 
     /* ------------------- Get Latitude and Longitude for City ------------------ */
+    /* ------- Weather API takes these as input, and not actual city name ------- */
     var queryURLCoordinates = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=5&appid=" + APIKey;
     // console.log(`Query URL for coordinates is: ${queryURLCoordinates}`);
+
     fetch(queryURLCoordinates)
         .then(function (response) {
             // Calling .json() to access the json data stored inside the returned promise
@@ -73,10 +79,10 @@ function getWeather(city) {
             var targetSection = document.getElementById("forecast");
             targetSection.innerHTML = "";
 
-            /* ------------------- call function to create City button ------------------ */
+            /* ------------------- Call function to create City button ------------------ */
             // console.log(cityArray);
-            if (cityArray === null) createCityButton(city, 1);
-            else if (!(cityArray.includes(city))) createCityButton(city, 1);
+            if (cityArray === null) createCityButton(city, 1); // If nothing stored in local storage at all
+            else if (!(cityArray.includes(city))) createCityButton(city, 1); // If it is a new City
 
             /* -------------- Store latitude and longitude values for city -------------- */
             var lat = data[0].lat;
@@ -97,6 +103,7 @@ function getWeather(city) {
                 // We store all of the retrieved data inside of an object called "data"
                 .then(function (data) {
 
+                    console.log(`Info: Data retrieved from Weather API for ${city} is here: \n`);
                     console.log(data);
 
                     /* --------- There should be 40 values 5 days at 3 hourly intervals --------- */
@@ -108,14 +115,14 @@ function getWeather(city) {
                         var dateArray = trueDate.toString().split(" ");
                         var dateDisplay = dateArray[0] + " " + dateArray[1] + " " + dateArray[2] + " " + dateArray[3];
                         var dateDisplayShort = dateArray[2] + " " + dateArray[1] + " " + dateArray[3]
-                        
-                        // Store today's date
+
+                        /* - Store today's date so we can ignore it when showing the 5 day forecast - */
                         if (i === 0) var todayDate = dateDisplayShort;
 
                         // console.log(dateDisplayShort); // Show dates in the array e.g. 28 Jan 2024 
                         // console.log(dateArray[4]); // Show the hours
 
-                        // Need to set the weather time to the second 3 hourly slot to ensure 5 days are always returned
+                        // Need to set the weather time to the correct 3 hourly slot to ensure 5 days are always returned
                         // Since if it's the next 3 hourly slot, the API won't have weather for that time  in 5 days' time
                         var d = new Date();
                         var currentHour = d.getHours(); // 24 hour format
@@ -165,7 +172,7 @@ function getWeather(city) {
                         }
 
                         if ((dateArray[4] === weatherTime) | (i === 0)) { // weatherTime is the time of day in future we should get the weather for
-                            
+
                             // console.log(`${i} =============================================`);
                             // console.log(`Date: ${dateDisplay}`);
                             // console.log(`City name: ${data.city.name}`);
@@ -218,7 +225,6 @@ function getWeather(city) {
                                 humidityEl.textContent = humidityDisplay;
 
                                 /* --------------------- Create the elements on the page -------------------- */
-
                                 targetSection.appendChild(cityEl);
                                 targetSection.appendChild(tempEl);
                                 targetSection.appendChild(windEl);
@@ -228,6 +234,7 @@ function getWeather(city) {
                                 targetSection.style.border = "2px solid black";
                                 targetSection.style.padding = "5px";
 
+                            /* ----------------------------- 5 day forecast --------------------------------- */
                             } else if (todayDate !== dateDisplayShort) {
 
                                 /* ------------------------- Counter for the 5 cards ------------------------ */
@@ -281,14 +288,6 @@ function getWeather(city) {
         });
 }
 
-/* -------------------------------------------------------------------------- */
-/*                 Event listener when City button is pressed                 */
-/* -------------------------------------------------------------------------- */
-
-/* ------- Add a listener to the container containing the city buttons ------ */
-var container = document.getElementById("history");
-container.addEventListener("click", handleButtonClick);
-
 /* ----------- Function to handle the button click for city button ---------- */
 function handleButtonClick(event) {
 
@@ -302,6 +301,8 @@ function handleButtonClick(event) {
 
         // Access the data attribute value
         var cityValue = event.target.dataset.city;
+        
+        /* --------- Get the weather for the city button that was presented --------- */
         // console.log(`Will need to fetch weather info for ${cityValue}`);
         getWeather(cityValue);
     }
@@ -331,13 +332,14 @@ function createCityButton(city, updateLS) {
 
     // Update array of cities and save to local storage
     if (updateLS) {
-        console.log(city);
+        console.log(`Info: ${city} was added to local storage`);
         cityArray.push(city);
         var cityArrayString = JSON.stringify(cityArray);
         localStorage.setItem("Weather-Dashboard-Cities", cityArrayString);
     }
 }
 
+/* ---- Function to clear local storage when the reset button is pressed ---- */
 function resetApp() {
     localStorage.removeItem("Weather-Dashboard-Cities");
 }
